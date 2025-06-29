@@ -1,0 +1,132 @@
+Paste EVERYTHING below into hyperrcompute_docs.txt:
+yaml
+Copy
+Edit
+# 🧠 hyperrcompute
+
+`hyperrcompute` is a peer-to-peer remote compute execution platform for launching ephemeral Docker containers over a decentralized network using hyperdht. It enables secure, live access to containers via private connection strings.
+
+---
+
+## 🚀 Features
+
+- 🔐 Secure private connection strings (like SSH keys)
+- 🐳 Ephemeral Docker containers (e.g. Ubuntu)
+- 🌐 Web UI over TCP tunnels (via hyperdht)
+- ⏱️ Configurable lifetime (`--time`)
+- 💥 Forceful spin-up (`--force`)
+- 🧪 Live terminal streaming (`--live`)
+
+---
+
+## 📦 Installation
+
+Install the CLI globally:
+
+```bash
+npm install -g hyperrcompute@latest
+⚠️ Ignore safe npm warnings like node-domexception@1.0.0 — they do not affect functionality.
+
+🖥️ Start a Provider Node
+Start your local compute provider:
+
+bash
+Copy
+Edit
+hyperrcompute <PRIVATE_CONNECTION_STRING> --port <PORT>
+Example:
+bash
+Copy
+Edit
+hyperrcompute 89fd199803cd2aaf... --port 3000
+Expected Output:
+
+arduino
+Copy
+Edit
+[INFO] No SERVER_KEY found in .env. Generating a new one...
+[INFO] Server started
+Connection Mode: Private Connection String
+Access: http://127.0.0.1:3000
+Treat connection strings like SSH keys — keep them safe and private!
+
+🧑‍💻 Run a Live Compute Job
+Run a job on a remote provider:
+
+bash
+Copy
+Edit
+hyperrcompute --image ubuntu --time 10 --force --live --connector <PRIVATE_CONNECTION_STRING>
+Expected Output:
+
+pgsql
+Copy
+Edit
+[INFO] Generated token: <JWT_TOKEN>
+Docker Management Server running on port 3000.
+🧪 Developer Testing
+Run test container manually via Node.js:
+
+bash
+Copy
+Edit
+node demo-index.js --image ubuntu --time 10 --force --live --connector <PRIVATE_CONNECTION_STRING>
+📁 .env Configuration
+Auto-generated .env stores:
+
+SERVER_KEY: JWT signing secret for peer authentication
+
+📜 Runtime Output Includes:
+🔑 JWT token
+
+🐳 Docker management port (e.g. 3000)
+
+🌐 Tunnel access URL: http://127.0.0.1:<PORT>
+
+🧯 Troubleshooting
+Docker must be running
+→ Start Docker Desktop (Windows/Mac) or daemon (Linux)
+
+Command not found
+→ Run npm install -g hyperrcompute
+→ Make sure npm bin path is in your system PATH
+
+Connection timeout
+→ Ensure the provider node is live and you’re using the correct connection string
+
+ReferenceError: containerId is not defined
+→ Likely bug in demo-index.js, or container didn’t start
+
+🔐 Security
+Keep your PRIVATE_CONNECTION_STRING safe — like an SSH key
+
+Rotate SERVER_KEY periodically
+
+Do not share .env or tokens
+
+🤝 Credits
+Built by the ❤️ HyperrCompute team
+Powered by Docker, Node.js, and peer-to-peer networking
+
+📃 License
+MIT License
+
+markdown
+Copy
+Edit
+
+---
+
+### ✅ What to Do With This
+
+1. Create `hyperrcompute_docs.txt`  
+2. Paste all of the above into it  
+3. Place it beside `bot_server.py`
+
+Your bot will now:
+- Answer in **structured markdown format**
+- Teach real commands with examples
+- Help debug errors like Docker or connection issues
+- Look pro-level 🔥
+
+Need a matching upgrade to your `index.html` chat UI next? Just say the word.
