@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: hyperr-backend
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10
+    autoDeploy: true
