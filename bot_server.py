@@ -4,29 +4,25 @@ import uuid
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import google.generativeai as genai
-import PyPDF2
-import docx
 
-# ───── Load environment and API key ─────
 load_dotenv()
 genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
-# ───── Flask app setup ─────
+# ───── Flask setup ─────
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
-# ───── Load documentation file ─────
+# ───── Load docs ─────
 DOC_FILE = "hyperrcompute_docs.txt"
-hyperr_docs = ""
+hyperr_docs = "hyperrcompute_docs.txt not found."
 if os.path.exists(DOC_FILE):
     with open(DOC_FILE, "r", encoding="utf-8") as f:
         hyperr_docs = f.read()
 
-# ───── SQLite database setup ─────
+# ───── SQLite setup ─────
 DB_FILE = "chat.db"
 conn = sqlite3.connect(DB_FILE, check_same_thread=False)
 c = conn.cursor()
@@ -43,15 +39,10 @@ c.execute('''CREATE TABLE IF NOT EXISTS messages (
 )''')
 conn.commit()
 
-# ───── Upload folder ─────
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 # ───── Routes ─────
-
 @app.route("/")
 def home():
-    return send_from_directory(".", "index.html")
+    return send_from_directory(".", "chat.html")
 
 @app.route("/sessions")
 def get_sessions():
@@ -78,86 +69,49 @@ def delete_session(session_id):
     conn.commit()
     return jsonify({"status": "deleted"})
 
-@app.route("/upload/<session_id>", methods=["POST"])
-def upload_file(session_id):
-    if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
-
-    file = request.files["file"]
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    file.save(filepath)
-
-    try:
-        ext = os.path.splitext(filename)[1].lower()
-        content = ""
-
-        if ext == ".txt":
-            with open(filepath, "r", encoding="utf-8") as f:
-                content = f.read()
-        elif ext == ".pdf":
-            reader = PyPDF2.PdfReader(filepath)
-            content = "\n".join(page.extract_text() or "" for page in reader.pages)
-        elif ext == ".docx":
-            doc = docx.Document(filepath)
-            content = "\n".join(p.text for p in doc.paragraphs)
-        else:
-            return jsonify({"error": "Unsupported file type"}), 400
-
-        timestamp = datetime.now().isoformat()
-        content_msg = f"[Document Uploaded: {filename}]\n\n{content[:4000]}"
-        c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
-                  (session_id, "system", content_msg, timestamp))
-        conn.commit()
-
-        return jsonify({"status": "uploaded", "filename": filename})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
     session_id = data.get("session_id")
     user_message = data.get("message", "").strip()
-    timestamp = datetime.now().isoformat()
 
-    # Store user message
+    timestamp = datetime.now().isoformat()
     c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
               (session_id, "user", user_message, timestamp))
     conn.commit()
 
-    # Fetch full session history
+    # Load full chat history
     c.execute("SELECT role, content FROM messages WHERE session_id = ? ORDER BY id", (session_id,))
     history = c.fetchall()
 
-    user_history = "\n".join(f"{r.upper()}: {c}" for r, c in history if r in ("user", "bot"))
-    uploaded_docs = "\n\n".join(c for r, c in history if r == "system")
+    # Format messages for model
+    history_text = "\n".join([f"{role.capitalize()}: {content}" for role, content in history])
 
-    # System prompt
     system_prompt = f"""
-You are Hyperr‑Assistant, a technical expert of the decentralized GPU platform HyperrCompute.
+You are Hyperr-Assistant, a technical expert on the decentralized GPU platform HyperrCompute.
 
-📄 Uploaded docs:
-{uploaded_docs}
+Behaviors:
+- Adaptively include or skip headings like 'Steps' or 'Docs' based on query.
+- NEVER use headings for small talk (e.g., 'hey', 'hello').
+- Ask follow-up questions if user asks for estimates without full info.
+- Format code/commands in triple backticks for UI copy buttons.
+- Always be helpful, brief, and assume user wants direct assistance.
 
-📚 Official Docs:
+Pricing:
+- RTX 4090: 50 sats/minute
+
+Documentation:
 {hyperr_docs}
 
-💬 Conversation so far:
-{user_history}
-
-👤 User's next message:
-{user_message}
-"""
+Chat history:
+{history_text}
+    """
 
     try:
         response = model.generate_content(system_prompt)
         bot_reply = response.text.strip()
     except Exception as e:
-        bot_reply = f"❌ Error: {str(e)}"
+        bot_reply = f"\u274c Error: {str(e)}"
 
     bot_time = datetime.now().isoformat()
     c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
@@ -166,6 +120,7 @@ You are Hyperr‑Assistant, a technical expert of the decentralized GPU platform
 
     return jsonify({"response": bot_reply})
 
-# ───── Run app ─────
+# ───── Final Run Config (IMPORTANT for Render) ─────
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
