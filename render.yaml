@@ -3,7 +3,7 @@ services:
     name: hyperr-backend
     env: python
     buildCommand: ""
-    startCommand: python app.py
+    startCommand: python bot_server.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.10
