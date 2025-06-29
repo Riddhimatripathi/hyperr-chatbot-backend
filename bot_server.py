@@ -7,6 +7,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+# ───── Load environment and Gemini setup ─────
 load_dotenv()
 genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
@@ -15,7 +16,7 @@ model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
-# ───── Load docs ─────
+# ───── Load docs file ─────
 DOC_FILE = "hyperrcompute_docs.txt"
 hyperr_docs = "hyperrcompute_docs.txt not found."
 if os.path.exists(DOC_FILE):
@@ -83,10 +84,9 @@ def chat():
     # Load full chat history
     c.execute("SELECT role, content FROM messages WHERE session_id = ? ORDER BY id", (session_id,))
     history = c.fetchall()
-
-    # Format messages for model
     history_text = "\n".join([f"{role.capitalize()}: {content}" for role, content in history])
 
+    # Build system prompt
     system_prompt = f"""
 You are Hyperr-Assistant, a technical expert on the decentralized GPU platform HyperrCompute.
 
@@ -111,7 +111,7 @@ Chat history:
         response = model.generate_content(system_prompt)
         bot_reply = response.text.strip()
     except Exception as e:
-        bot_reply = f"\u274c Error: {str(e)}"
+        bot_reply = f"❌ Error: {str(e)}"
 
     bot_time = datetime.now().isoformat()
     c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
@@ -120,6 +120,11 @@ Chat history:
 
     return jsonify({"response": bot_reply})
 
+# ───── Serve any static file like CSS, images ─────
+@app.route("/<path:path>")
+def static_proxy(path):
+    return send_from_directory(".", path)
+
+# ───── Final Run Config ─────
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
