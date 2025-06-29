@@ -43,7 +43,7 @@ conn.commit()
 # ───── Routes ─────
 @app.route("/")
 def home():
-    return send_from_directory(".", "chat.html")
+    return send_from_directory(".", "index.html")
 
 @app.route("/sessions")
 def get_sessions():
@@ -111,7 +111,7 @@ Chat history:
         response = model.generate_content(system_prompt)
         bot_reply = response.text.strip()
     except Exception as e:
-        bot_reply = f"❌ Error: {str(e)}"
+        bot_reply = f" Error: {str(e)}"
 
     bot_time = datetime.now().isoformat()
     c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
