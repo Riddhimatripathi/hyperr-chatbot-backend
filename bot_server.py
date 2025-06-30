@@ -6,24 +6,18 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
-
-# ───── Load environment and Gemini setup ─────
 load_dotenv()
 genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-
-# ───── Flask setup ─────
 app = Flask(__name__, static_folder=".")
 CORS(app)
-
-# ───── Load docs file ─────
 DOC_FILE = "hyperrcompute_docs.txt"
 hyperr_docs = "hyperrcompute_docs.txt not found."
 if os.path.exists(DOC_FILE):
     with open(DOC_FILE, "r", encoding="utf-8") as f:
         hyperr_docs = f.read()
 
-# ───── SQLite setup ─────
+
 DB_FILE = "chat.db"
 conn = sqlite3.connect(DB_FILE, check_same_thread=False)
 c = conn.cursor()
@@ -106,7 +100,6 @@ Documentation:
 Chat history:
 {history_text}
     """
-
     try:
         response = model.generate_content(system_prompt)
         bot_reply = response.text.strip()
@@ -119,12 +112,8 @@ Chat history:
     conn.commit()
 
     return jsonify({"response": bot_reply})
-
-# ───── Serve any static file like CSS, images ─────
 @app.route("/<path:path>")
 def static_proxy(path):
     return send_from_directory(".", path)
-
-# ───── Final Run Config ─────
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
