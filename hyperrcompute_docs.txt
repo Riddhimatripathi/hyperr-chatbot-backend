@@ -1,132 +1,400 @@
-Paste EVERYTHING below into hyperrcompute_docs.txt:
-yaml
-Copy
-Edit
-# 🧠 hyperrcompute
+🚀 Welcome to Hyperrcompute
+Hyperrcompute is a decentralized GPU network that lets you access compute power from distributed devices across the globe — instantly and without setup.
 
-`hyperrcompute` is a peer-to-peer remote compute execution platform for launching ephemeral Docker containers over a decentralized network using hyperdht. It enables secure, live access to containers via private connection strings.
+No servers. No cloud contracts. No static IPs. Just plug in and compute.
 
----
+“Super easy to use, works without any setup!”
+— a happy user
 
-## 🚀 Features
+🔥 What Is Hyperrcompute?
+Hyperrcompute is a peer-to-peer GPU network that enables:
 
-- 🔐 Secure private connection strings (like SSH keys)
-- 🐳 Ephemeral Docker containers (e.g. Ubuntu)
-- 🌐 Web UI over TCP tunnels (via hyperdht)
-- ⏱️ Configurable lifetime (`--time`)
-- 💥 Forceful spin-up (`--force`)
-- 🧪 Live terminal streaming (`--live`)
+Renting compute from distributed GPUs around the world
+Sharing your own GPU for others to use — and earn
+Running ML models, inference jobs, simulations, etc.
+Full control over who accesses your machine and when
+All powered by a lightweight, zero-setup, decentralized stack.
 
----
+Quick Links
+What can Hyperrcompute do
+Our Features
+Get Started
+Check out the guides to learn how to install and use Hyperrcompute.
 
-## 📦 Installation
+→ Next: What can Hyperrcompute do
+⚡ What Can Hyperrcompute Do?
+Hyperrcompute is a decentralized GPU marketplace — connect to powerful GPUs around the world, or share your own and earn. No setup. No middlemen.
 
-Install the CLI globally:
+Here’s what you can do with Hyperrcompute:
 
-```bash
-npm install -g hyperrcompute@latest
-⚠️ Ignore safe npm warnings like node-domexception@1.0.0 — they do not affect functionality.
+🧠 Run AI/ML workloads on remote GPUs
+Instantly connect to decentralized GPUs for model training, fine-tuning, or inference — all without cloud accounts or DevOps.
 
-🖥️ Start a Provider Node
-Start your local compute provider:
+💸 Earn by Renting Out Your GPU
+Contribute your idle GPU to the network and get paid for the compute you provide — securely and on your terms.
 
-bash
-Copy
-Edit
-hyperrcompute <PRIVATE_CONNECTION_STRING> --port <PORT>
-Example:
-bash
-Copy
-Edit
-hyperrcompute 89fd199803cd2aaf... --port 3000
-Expected Output:
+🔄 Share Compute Between Friends, Teams, or Orgs
+Securely tunnel workloads to trusted GPUs without dealing with SSH keys, IPs, or VPNs.
 
-arduino
-Copy
-Edit
-[INFO] No SERVER_KEY found in .env. Generating a new one...
-[INFO] Server started
-Connection Mode: Private Connection String
-Access: http://127.0.0.1:3000
-Treat connection strings like SSH keys — keep them safe and private!
+🎮 Offload Game or Simulation Tasks
+Tap into remote GPUs for game server hosting, or physics simulations — peer-to-peer.
 
-🧑‍💻 Run a Live Compute Job
-Run a job on a remote provider:
+🔐 Maintain Full Privacy and Control
+All connections are encrypted and authenticated. You choose who uses your GPU, for how long, and what workloads are allowed.
+🚀 Our Features
+Discover how Hyperrcompute empowers you with secure, peer-to-peer access to GPU compute—whether you're consuming or supplying—on a global, decentralized marketplace.
 
-bash
-Copy
-Edit
-hyperrcompute --image ubuntu --time 10 --force --live --connector <PRIVATE_CONNECTION_STRING>
-Expected Output:
+⚡ Instant, Zero‑Config Setup
+Deploy a node or connect to a GPU in seconds with a single command. No firewall tweaks, static IP setups, or cloud accounts required—a true plug-and-play GPU marketplace.
 
-pgsql
-Copy
-Edit
-[INFO] Generated token: <JWT_TOKEN>
-Docker Management Server running on port 3000.
-🧪 Developer Testing
-Run test container manually via Node.js:
+📷 Connect via QR or Key
+Share workload access instantly—scan a QR code or paste a secure key to connect your application or laptop directly to a remote GPU node.
 
-bash
-Copy
-Edit
-node demo-index.js --image ubuntu --time 10 --force --live --connector <PRIVATE_CONNECTION_STRING>
-📁 .env Configuration
-Auto-generated .env stores:
+💻 Cross‑Platform & Framework Ready
+Works seamlessly on Linux, macOS, and Windows. Supports Docker, CUDA, PyTorch, TensorFlow, and containerized workflows—ideal for AI or general compute.
 
-SERVER_KEY: JWT signing secret for peer authentication
+📁 Secure File Manager (Beta)
+Transfer models, datasets, logs, and checkpoints peer-to-peer without third-party services—our built‑in file manager makes it easy and secure.
 
-📜 Runtime Output Includes:
-🔑 JWT token
+🔐 Built‑in Security by Design
+All sessions are end-to-end encrypted and authenticated. You choose who rents your GPU and for how long—no open ports and no centralized servers.
 
-🐳 Docker management port (e.g. 3000)
+🔗 True Peer-to-Peer Execution
+Bypasses centralized infrastructure entirely. Tasks run directly on supplier GPUs using decentralized tunnels and native peer-to-peer orchestration.
 
-🌐 Tunnel access URL: http://127.0.0.1:<PORT>
+💸 Earn from Idle GPUs
+Turn unused GPU cycles into income. Suppliers set their pricing; the marketplace matches them with demand—this aligns with decentralized models like Theta EdgeCloud’s supply–demand dynamics.
 
-🧯 Troubleshooting
-Docker must be running
-→ Start Docker Desktop (Windows/Mac) or daemon (Linux)
+🌍 Open‑Source & Transparent
+Fully open-source and community-driven. Customize your node, audit the code, and join an ecosystem designed for democratized compute—similar to how Hyperbolic enables transparent, decentralized GPU access.
 
-Command not found
-→ Run npm install -g hyperrcompute
-→ Make sure npm bin path is in your system PATH
+🧠 Intelligent Marketplace
+Smart pricing, dynamic availability, and load balancing help reduce costs by up to 2.5× compared to centralized clouds—echoing Nosana’s cost-efficiency goals.
 
-Connection timeout
-→ Ensure the provider node is live and you’re using the correct connection string
+🌟 Why It Matters
+Cost‑Effective Compute: Compete with big providers at a fraction of the cost
+Maximized Resource Use: Tap into idle GPUs globally
+Democratized Access: Great for individuals, startups, research labs, and more
+Resilient & Reliable: Works even if some nodes go offline
 
-ReferenceError: containerId is not defined
-→ Likely bug in demo-index.js, or container didn’t start
+Hyperrcompute on Windows
+The easiest way to start using Hyperrcompute's decentralized GPU marketplace is by installing it through NPM (Node Package Manager). Get instant access to distributed computing power or start earning by sharing your GPU resources.
 
-🔐 Security
-Keep your PRIVATE_CONNECTION_STRING safe — like an SSH key
+What is Hyperrcompute?
+Hyperrcompute is a decentralized GPU marketplace that connects:
 
-Rotate SERVER_KEY periodically
+GPU Providers: Earn by sharing your unused GPU computing power
+GPU Consumers: Access affordable, distributed computing resources for AI training, mining, and more
+Step 1: Install WSL2 and Ubuntu
+Open PowerShell as Administrator and run:
 
-Do not share .env or tokens
+wsl --install
 
-🤝 Credits
-Built by the ❤️ HyperrCompute team
-Powered by Docker, Node.js, and peer-to-peer networking
+Restart your system if prompted
+Then open Microsoft Store and install Ubuntu (20.04 or later)
+Step 2: Update Ubuntu (inside WSL)
+sudo apt update && sudo apt upgrade -y
 
-📃 License
-MIT License
+Step 3: Install Docker Desktop for Windows
+Download and install Docker Desktop: https://www.docker.com/products/docker-desktop
+Enable WSL2 integration in Docker Desktop settings
+Make sure your installed Ubuntu distro is selected
+Step 4: Add Your WSL User to Docker Group
+sudo usermod -aG docker $USER
+newgrp docker
 
-markdown
-Copy
-Edit
+Step 5: Verify Docker Works in WSL
+docker info
 
----
+Step 6: Install Node.js (Recommended: v18+) using nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+source ~/.bashrc
+nvm install 18
+nvm use 18
 
-### ✅ What to Do With This
+Step 7: Install Hyperrcompute
+npm i hyperrcompute@0.0.12 -g
 
-1. Create `hyperrcompute_docs.txt`  
-2. Paste all of the above into it  
-3. Place it beside `bot_server.py`
+Step 8: Get Command From Website
+Go to command section and fill the configuration in form. You will get a command from it run that on your terminal
 
-Your bot will now:
-- Answer in **structured markdown format**
-- Teach real commands with examples
-- Help debug errors like Docker or connection issues
-- Look pro-level 🔥
+Install from Website
 
-Need a matching upgrade to your `index.html` chat UI next? Just say the word.
+Step 9: Start Hyperrcompute in Live Mode
+hyperrcompute --image <DOCKER_IMAGE> --hours <HOURS> --minutes <MINUTES> --force --live --connector <PRIVATE_CONNECTION_STRING> --userId <USER_ID>
+
+Step 10: Access Docker Management Server
+Open browser to: http://localhost:3000/containers or use Postman for API testing
+
+Optional: Enable Docker to Start on Boot
+Docker Desktop starts with Windows by default. You can change this in Docker Desktop settings.
+
+Verification Checklist
+ Docker Desktop installed and WSL2 integration enabled
+ docker info works inside Ubuntu WSL
+ hyperrcompute --live ... runs successfully
+ Access Docker endpoints via http://localhost:3000/containers
+Hyperrcompute on Linux
+Get instant access to the decentralized GPU marketplace without installing Node.js. The Hyperrcompute executable works natively on Windows, Mac, and Linux - perfect for quick setup and immediate access to distributed computing resources.
+
+Why Choose the Linux?
+Zero Dependencies: No Node.js installation required
+Instant Setup: Download and run immediately
+Full Functionality: Complete access to GPU marketplace features
+Lightweight: Optimized binaries for each platform
+Offline Capable: Works without internet for local operations
+Step 1: Update System Packages
+sudo apt update && sudo apt upgrade -y
+
+Step 2: Install Docker Engine
+Install required packages:
+
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+Add Docker's official GPG key:
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+Set up the repository:
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+Install Docker Engine:
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+Step 3: Add User to Docker Group
+sudo usermod -aG docker $USER
+
+Important: Log out and back in, or run:
+
+newgrp docker
+
+Step 4: Verify Docker Works Without Sudo
+docker info
+
+Step 5: Install Node.js (Recommended: v18+)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+source ~/.bashrc
+nvm install 18
+nvm use 18
+
+Step 6: Install Hyperrcompute
+npm i hyperrcompute@0.0.12 -g
+
+Step 7: Get Command From Website
+Go to command section and fill the configuration in form. You will get a command from it run that on your terminal
+
+Install from Website
+
+Step 8: Start Hyperrcompute in Live Mode
+hyperrcompute --image <DOCKER_IMAGE> --hours <HOURS> --minutes <MINUTES> --force --live --connector <PRIVATE_CONNECTION_STRING> --userId <USER_ID>
+
+Step 9: Access Docker Management Server
+Open browser to: http://localhost:3000/containers or use Postman for API testing
+
+Optional: Make Docker Socket More Accessible (Not for production)
+sudo chmod 666 /var/run/docker.sock
+
+Optional: Enable Docker to Start on Boot
+sudo systemctl enable docker
+
+Verification Checklist
+ docker info works without sudo
+ npm install completes without error
+ hyperrcompute --live ... runs successfully
+ Access container routes via http://localhost:3000/containers
+
+Hyperrcompute on Mac
+Get started with the decentralized GPU marketplace on macOS. Whether you want to earn by sharing your Mac's GPU power or access distributed computing resources for your projects, follow these simple steps.
+
+Mac GPU Marketplace Overview
+For Mac Users:
+
+M1/M2/M3 Mac Owners: Share your Apple Silicon GPU power and earn
+Intel Mac Users: Access powerful distributed GPUs for AI training and computation
+Developers: Seamlessly integrate GPU marketplace into your workflow
+Step 1: Update System Packages
+sudo apt update && sudo apt upgrade -y
+
+Step 2: Install Docker Engine
+Install required packages:
+
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+Add Docker's official GPG key:
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+Set up the repository:
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+Install Docker Engine:
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+Step 3: Add User to Docker Group
+sudo usermod -aG docker $USER
+
+Important: Log out and back in, or run:
+
+newgrp docker
+
+Step 4: Verify Docker Works Without Sudo
+docker info
+
+Step 5: Install Node.js (Recommended: v18+)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+source ~/.bashrc
+nvm install 18
+nvm use 18
+
+Step 6: Install Hyperrcompute
+npm i hyperrcompute@0.0.12 -g
+
+Step 7: Get Command From Website
+Go to command section and fill the configuration in form. You will get a command from it run that on your terminal
+
+Install from Website
+
+Step 8: Start Hyperrcompute in Live Mode
+hyperrcompute --image <DOCKER_IMAGE> --hours <HOURS> --minutes <MINUTES> --force --live --connector <PRIVATE_CONNECTION_STRING> --userId <USER_ID>
+
+Step 9: Access Docker Management Server
+Open browser to: http://localhost:3000/containers or use Postman for API testing
+
+Optional: Make Docker Socket More Accessible (Not for production)
+sudo chmod 666 /var/run/docker.sock
+
+Optional: Enable Docker to Start on Boot
+sudo systemctl enable docker
+
+Verification Checklist
+ docker info works without sudo
+ npm install completes without error
+ hyperrcompute --live ... runs successfully
+ Access container routes via http://localhost:3000/containers
+Using Hyperrcompute
+Hyperrcompute is a peer-to-peer remote compute execution platform that enables you to deploy lightweight, ephemeral Docker containers over a decentralized network. Whether you're providing compute resources or consuming them, Hyperrcompute makes distributed computing accessible and secure.
+
+🚀 Key Capabilities
+For Compute Providers (Earn):
+
+Share your device's computing power with the network
+Run secure, isolated Docker containers for clients
+Earn for providing resources
+Set custom pricing and availability schedules
+For Compute Consumers (Access Power):
+
+Deploy ephemeral containers on distributed hardware
+Access powerful GPU and CPU resources on-demand
+Pay only for actual usage time
+Scale workloads across multiple providers
+Core Features:
+
+🔐 Secure private connection strings (like SSH keys)
+🐳 Ephemeral Docker containers with configurable lifetimes
+🌐 Web UI access over TCP tunnels via hyperdht
+⏱️ Flexible container duration control (--time)
+💥 Force container deployment (--force)
+🧪 Live mode with real-time data streaming (--live)
+Getting Started
+Installation
+Install globally using npm:
+
+npm i -g hyperrcompute@0.0.12
+
+Ensure Docker is installed and running, and Node.js v18+ is in use.
+
+Basic Command Format
+hyperrcompute [options]
+
+Available Options
+--version – Display the current version of Hyperrcompute
+--help – Show help instructions
+--new – Generate a new SERVER_KEY and save it to .env
+--hours <number> – Set duration in hours (default: 0)
+--minutes <number> – Set duration in minutes (default: 0)
+--image <image_name> – Docker image to run (required)
+--live – Run in live mode (required for starting server)
+--connect <KEY_FROM_WEBSITE> – Connect to an existing Hyperrcompute server
+--force – Force start even if warnings are present
+--port <port_number> – Set the port for connecting (default: 3000)
+Usage Examples
+Start a New Live GPU Server Instance
+hyperrcompute --new --image ubuntu --hours 1 --minutes 0 --force --live --connector 89fd199803cd2aaf4b5cdba373a970a9e6a08f86547f26c24aae3efee062 --userId 68562024094012b6f3d5ed13
+
+Creates a container with 'ubuntu' image, runs for 1 hour using a connector key.
+
+Connect to an Existing GPU Server
+hyperrcompute --connect "89fd199803cd2aaf4b5cdba373a970a9e6a08f86547fee062-SPLIT-12cd30614bffe9e86eefeb7753e3f5245b06bc4bd906b63af" --port 30001
+
+It will return a url like http://hyperrcompute.com/hyperrcompute/terminal?key=12cd30614bffe9e86eefeb7
+
+Open it in browser to access terminal, you are connected to an existing server on port 30001.
+
+Display Help
+hyperrcompute --help
+
+Environment File (.env)
+The --new flag generates a SERVER_KEY and stores it in a .env file.
+
+Reference
+NPM Package: https://www.npmjs.com/package/hyperrcompute
+
+Hyperrcompute Terminology
+Master the essentials of the Hyperrcompute ecosystem with this concise terminology guide.
+
+🔌 Core Terms
+Connection String
+A secure identifier that enables peer-to-peer communication between nodes in the Hyperrcompute network.
+
+Example: 89fd199803cd2aaf4b5cdba373a970a9e6a08f86547f26c24aae3efee062
+
+Treat it like a password—confidential and private.
+
+Provider
+A user who contributes compute resources (CPU/GPU) to the network and earns HCC tokens in return.
+
+Consumer
+A user who rents computing resources from the network to run jobs, train models, or deploy containers.
+
+⚙️ Technical Components
+Ephemeral Container
+A temporary container that self-destructs after completing its task.
+
+TCP Tunnel
+Creates a secure bridge between your machine and a remote container (e.g., for Jupyter access).
+
+Live Mode (--live)
+Streams logs, metrics, and output in real time during container execution.
+
+💰 Payment & Resource Units
+HCC Token
+The native token used for payments and rewards across the platform.
+
+Compute Credits
+Simplified units for tracking resource usage (e.g., 1 GPU hour = 100 credits).
+
+🛡️ Security & Network
+SERVER_KEY
+An auto-generated key stored in .env to securely authenticate nodes.
+
+JWT Token
+Used for secure API access and container session validation.
+
+Private Network
+Encrypted peer-to-peer mesh enabling secure, decentralized execution.
+
+📌 Tip: Keep this glossary handy as you navigate the platform.
