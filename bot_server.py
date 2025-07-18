@@ -6,17 +6,21 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
+from faq_data import faq_data  
+
 load_dotenv()
-genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+
 app = Flask(__name__, static_folder=".")
 CORS(app)
+
 DOC_FILE = "hyperrcompute_docs.txt"
 hyperr_docs = "hyperrcompute_docs.txt not found."
 if os.path.exists(DOC_FILE):
     with open(DOC_FILE, "r", encoding="utf-8") as f:
         hyperr_docs = f.read()
-
 
 DB_FILE = "chat.db"
 conn = sqlite3.connect(DB_FILE, check_same_thread=False)
@@ -34,7 +38,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS messages (
 )''')
 conn.commit()
 
-# ───── Routes ─────
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
@@ -75,21 +78,17 @@ def chat():
               (session_id, "user", user_message, timestamp))
     conn.commit()
 
-    # Load full chat history
     c.execute("SELECT role, content FROM messages WHERE session_id = ? ORDER BY id", (session_id,))
     history = c.fetchall()
     history_text = "\n".join([f"{role.capitalize()}: {content}" for role, content in history])
 
-    # Build system prompt
     system_prompt = f"""
 You are Hyperr-Assistant, a technical expert on the decentralized GPU platform HyperrCompute.
 
 Behaviors:
-- Adaptively include or skip headings like 'Steps' or 'Docs' based on query.
-- NEVER use headings for small talk (e.g., 'hey', 'hello').
-- Ask follow-up questions if user asks for estimates without full info.
-- Format code/commands in triple backticks for UI copy buttons.
-- Always be helpful, brief, and assume user wants direct assistance.
+- Format code/commands in triple backticks.
+- Be brief and helpful.
+- Follow up if user asks for estimates without details.
 
 Pricing:
 - RTX 4090: 50 sats/minute
@@ -100,11 +99,12 @@ Documentation:
 Chat history:
 {history_text}
     """
+
     try:
         response = model.generate_content(system_prompt)
         bot_reply = response.text.strip()
     except Exception as e:
-        bot_reply = f" Error: {str(e)}"
+        bot_reply = f"Error: {str(e)}"
 
     bot_time = datetime.now().isoformat()
     c.execute("INSERT INTO messages (session_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
@@ -112,8 +112,41 @@ Chat history:
     conn.commit()
 
     return jsonify({"response": bot_reply})
+
+@app.route("/faq", methods=["GET"])
+def get_faq():
+    return jsonify(faq_data)
+
+@app.route("/faq_search", methods=["POST"])
+def faq_search():
+    data = request.get_json()
+    user_question = data.get("question", "").strip()
+
+    if not user_question:
+        return jsonify({"error": "No question provided"}), 400
+
+    faq_context = "\n".join([f"Q: {faq['question']}\nA: {faq['answer']}" for faq in faq_data])
+    prompt = f"""You are a helpful assistant. Given the user's question, find the most relevant answer from the FAQ context below.
+
+FAQ context:
+{faq_context}
+
+User question:
+{user_question}
+
+Answer:"""
+
+    try:
+        response = model.generate_content(prompt)
+        answer = response.text.strip()
+    except Exception as e:
+        answer = f"Error: {str(e)}"
+
+    return jsonify({"answer": answer})
+
 @app.route("/<path:path>")
 def static_proxy(path):
     return send_from_directory(".", path)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
