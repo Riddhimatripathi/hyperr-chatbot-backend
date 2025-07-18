@@ -9,9 +9,9 @@ import google.generativeai as genai
 from faq_data import faq_data  
 
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
+genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+
 
 app = Flask(__name__, static_folder=".")
 CORS(app)
