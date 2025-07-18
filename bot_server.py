@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
-from faq_data import faq_data  
+from faq_data import faq_list as faq_data  
 
 load_dotenv()
 genai.configure(api_key="AIzaSyA8lEE41kySADz3gHHPZwUvD40xgS5gQxQ")
